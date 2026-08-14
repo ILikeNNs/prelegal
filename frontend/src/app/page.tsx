@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import NdaForm from "@/components/NdaForm";
+import NdaChat from "@/components/NdaChat";
 import DocumentPreview from "@/components/DocumentPreview";
 import { DEFAULT_NDA_FORM_DATA, type NdaFormData } from "@/lib/types";
 
@@ -15,14 +15,14 @@ export default function Home() {
           Mutual NDA Creator
         </h1>
         <p className="text-sm text-gray-500">
-          Fill in the deal terms and download a completed Common Paper Mutual
-          NDA.
+          Chat with the assistant about your deal and it will fill in a
+          completed Common Paper Mutual NDA for you to download.
         </p>
       </header>
 
       <main className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-6 py-8 lg:grid-cols-[380px_1fr]">
         <section className="no-print rounded-lg border border-gray-200 bg-white p-6">
-          <NdaForm data={formData} onChange={setFormData} />
+          <NdaChat onFieldsChange={setFormData} />
         </section>
 
         <section className="rounded-lg border border-gray-200 bg-white p-8">

@@ -23,8 +23,17 @@ function formatDate(isoDate: string): string {
   });
 }
 
+/**
+ * Renders as a static glyph rather than GFM task-list syntax ("- [x]"), which
+ * react-markdown turns into a real <input type="checkbox"> element. Because
+ * that input only receives an explicit `checked` prop when true, flipping an
+ * option from checked to unchecked leaves the previous DOM checkbox stuck
+ * showing checked - producing a document with two contradictory boxes
+ * checked. This is a read-only preview of a printed document, not an
+ * interactive control, so a plain glyph avoids that class of bug entirely.
+ */
 function checkbox(checked: boolean): string {
-  return checked ? "[x]" : "[ ]";
+  return checked ? "☒" : "☐";
 }
 
 export function buildCoverPage(data: NdaFormData): string {
