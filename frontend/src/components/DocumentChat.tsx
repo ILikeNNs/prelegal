@@ -1,23 +1,25 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { mergeNdaFields, type ChatMessage, type NdaFormData } from "@/lib/types";
-import { sendNdaChatMessage } from "@/lib/ndaChatApi";
+import type { ChatMessage, DocumentType, FieldValues } from "@/lib/types";
+import { fetchDocumentType, sendDocumentChatMessage } from "@/lib/documentsApi";
 
 const GREETING: ChatMessage = {
   role: "assistant",
   content:
-    "Hi! I'll help you put together a Mutual NDA. Let's start with the basics — " +
-    "what are the two companies' names, and what's the purpose of sharing " +
-    "confidential information between them?",
+    "Hi! I can help you put together a legal document from our template library " +
+    "— things like an NDA, a services agreement, a DPA, and more. What are you " +
+    "trying to create?",
 };
 
-interface NdaChatProps {
-  onFieldsChange: (data: NdaFormData) => void;
+interface DocumentChatProps {
+  onDocumentChange: (document: DocumentType | null) => void;
+  onFieldsChange: (fields: FieldValues) => void;
 }
 
-export default function NdaChat({ onFieldsChange }: NdaChatProps) {
+export default function DocumentChat({ onDocumentChange, onFieldsChange }: DocumentChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
+  const [documentKey, setDocumentKey] = useState<string | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -34,9 +36,14 @@ export default function NdaChat({ onFieldsChange }: NdaChatProps) {
     setIsLoading(true);
 
     try {
-      const { reply, fields } = await sendNdaChatMessage(nextMessages);
+      const { reply, documentType, fields } = await sendDocumentChatMessage(nextMessages);
       setMessages([...nextMessages, { role: "assistant", content: reply }]);
-      onFieldsChange(mergeNdaFields(fields));
+      onFieldsChange(fields);
+
+      if (documentType && documentType !== documentKey) {
+        setDocumentKey(documentType);
+        onDocumentChange(await fetchDocumentType(documentType));
+      }
     } catch {
       setError("The assistant is unavailable right now. Please try again.");
     } finally {
