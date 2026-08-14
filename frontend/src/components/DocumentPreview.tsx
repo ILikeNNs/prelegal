@@ -1,16 +1,25 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
-import { standardTerms } from "@/data/standardTerms";
-import { buildCoverPage } from "@/lib/buildCoverPage";
-import type { NdaFormData } from "@/lib/types";
+import { renderCoverPage } from "@/lib/renderTemplate";
+import type { DocumentType, FieldValues } from "@/lib/types";
 
 interface DocumentPreviewProps {
-  data: NdaFormData;
+  document: DocumentType | null;
+  fields: FieldValues;
 }
 
-export default function DocumentPreview({ data }: DocumentPreviewProps) {
-  const coverPage = buildCoverPage(data);
+export default function DocumentPreview({ document, fields }: DocumentPreviewProps) {
+  if (!document) {
+    return (
+      <p className="text-sm text-gray-500">
+        Tell the assistant what kind of document you need, and a preview will appear here as you go.
+      </p>
+    );
+  }
+
+  const fieldLabels = Object.fromEntries(document.fields.map((field) => [field.name, field.label]));
+  const coverPage = renderCoverPage(document.coverPageTemplate, fields, fieldLabels);
 
   return (
     <article className="nda-document prose prose-sm max-w-none">
@@ -19,7 +28,7 @@ export default function DocumentPreview({ data }: DocumentPreviewProps) {
       </ReactMarkdown>
       <div className="page-break" />
       <ReactMarkdown remarkPlugins={[remarkGfm]} rehypePlugins={[rehypeRaw]}>
-        {standardTerms}
+        {document.standardTerms}
       </ReactMarkdown>
     </article>
   );

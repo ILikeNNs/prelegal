@@ -26,3 +26,9 @@ SESSION_SECRET_KEY = os.environ.get("SESSION_SECRET_KEY") or secrets.token_hex(3
 STATIC_DIR = Path(
     os.environ.get("STATIC_DIR", str(Path(__file__).resolve().parent.parent.parent / "static"))
 )
+
+DOCUMENT_DATA_DIR = Path(
+    os.environ.get(
+        "DOCUMENT_DATA_DIR", str(Path(__file__).resolve().parent.parent.parent / "document_data")
+    )
+)

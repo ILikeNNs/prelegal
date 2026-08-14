@@ -1,28 +1,28 @@
 "use client";
 
 import { useState } from "react";
-import NdaChat from "@/components/NdaChat";
+import DocumentChat from "@/components/DocumentChat";
 import DocumentPreview from "@/components/DocumentPreview";
-import { DEFAULT_NDA_FORM_DATA, type NdaFormData } from "@/lib/types";
+import type { DocumentType, FieldValues } from "@/lib/types";
 
 export default function Home() {
-  const [formData, setFormData] = useState<NdaFormData>(DEFAULT_NDA_FORM_DATA);
+  const [activeDocument, setActiveDocument] = useState<DocumentType | null>(null);
+  const [fields, setFields] = useState<FieldValues>({});
 
   return (
     <div className="min-h-screen bg-gray-50">
       <header className="no-print border-b border-gray-200 bg-white px-6 py-4">
         <h1 className="text-xl font-semibold text-gray-900">
-          Mutual NDA Creator
+          {activeDocument?.name ?? "Legal Document Creator"}
         </h1>
         <p className="text-sm text-gray-500">
-          Chat with the assistant about your deal and it will fill in a
-          completed Common Paper Mutual NDA for you to download.
+          Chat with the assistant about what you need and it will fill in a completed document for you to download.
         </p>
       </header>
 
       <main className="mx-auto grid max-w-6xl grid-cols-1 gap-8 px-6 py-8 lg:grid-cols-[380px_1fr]">
         <section className="no-print rounded-lg border border-gray-200 bg-white p-6">
-          <NdaChat onFieldsChange={setFormData} />
+          <DocumentChat onDocumentChange={setActiveDocument} onFieldsChange={setFields} />
         </section>
 
         <section className="rounded-lg border border-gray-200 bg-white p-8">
@@ -32,11 +32,12 @@ export default function Home() {
               type="button"
               onClick={() => window.print()}
               className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+              disabled={!activeDocument}
             >
               Download PDF
             </button>
           </div>
-          <DocumentPreview data={formData} />
+          <DocumentPreview document={activeDocument} fields={fields} />
         </section>
       </main>
     </div>

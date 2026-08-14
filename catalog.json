@@ -15,9 +15,19 @@
     "filename": "CSA.md"
   },
   {
+    "name": "Cloud Service Agreement Cover Page",
+    "description": "Cover page for the Common Paper Cloud Service Agreement that captures the deal-specific variables (fees, subscription period, governing law, liability caps) and incorporates the CSA Standard Terms by reference.",
+    "filename": "CSA-coverpage.md"
+  },
+  {
     "name": "Design Partner Agreement",
     "description": "Standard terms giving an early-access design partner use of a product in exchange for feedback, while the provider retains ownership of the product and any resulting improvements.",
     "filename": "Design-Partner-Agreement.md"
+  },
+  {
+    "name": "Design Partner Agreement Cover Page",
+    "description": "Cover page for the Common Paper Design Partner Agreement that captures the deal-specific variables (product, program terms, fees, effective date, governing law) and incorporates the Design Partner Standard Terms by reference.",
+    "filename": "Design-Partner-Agreement-coverpage.md"
   },
   {
     "name": "Service Level Agreement",
@@ -25,9 +35,19 @@
     "filename": "SLA.md"
   },
   {
+    "name": "Service Level Agreement Cover Page",
+    "description": "Cover page for the Common Paper Service Level Agreement that captures the deal-specific variables (target uptime, response time, support channel) and incorporates the SLA Standard Terms by reference.",
+    "filename": "SLA-coverpage.md"
+  },
+  {
     "name": "Professional Services Agreement",
     "description": "Standard terms for a provider performing professional services and delivering deliverables to a customer under one or more statements of work (SOWs), covering IP assignment, payment, warranties, liability, and confidentiality.",
     "filename": "PSA.md"
+  },
+  {
+    "name": "Professional Services Agreement Cover Page",
+    "description": "Cover page for the Common Paper Professional Services Agreement that captures the deal-specific Key Terms and SOW variables (services, deliverables, fees, governing law) and incorporates the PSA Standard Terms by reference.",
+    "filename": "PSA-coverpage.md"
   },
   {
     "name": "Data Processing Agreement",
@@ -35,9 +55,19 @@
     "filename": "DPA.md"
   },
   {
+    "name": "Data Processing Agreement Cover Page",
+    "description": "Cover page for the Common Paper Data Processing Agreement that captures the deal-specific variables (subprocessors, security policy, categories of data, SCC annex details) and incorporates the DPA Standard Terms by reference.",
+    "filename": "DPA-coverpage.md"
+  },
+  {
     "name": "Software License Agreement",
     "description": "Standard terms licensing on-premises or self-hosted software to a customer, covering license scope, restrictions, updates, open source software, warranties, liability, and termination.",
     "filename": "Software-License-Agreement.md"
+  },
+  {
+    "name": "Software License Agreement Cover Page",
+    "description": "Cover page for the Common Paper Software License Agreement that captures the deal-specific variables (fees, subscription period, permitted uses, governing law) and incorporates the Software License Standard Terms by reference.",
+    "filename": "Software-License-Agreement-coverpage.md"
   },
   {
     "name": "Partnership Agreement",
@@ -45,9 +75,19 @@
     "filename": "Partnership-Agreement.md"
   },
   {
+    "name": "Partnership Agreement Cover Page",
+    "description": "Cover page for the Common Paper Partnership Agreement that captures the deal-specific variables (obligations, territory, payment, governing law) and incorporates the Partnership Standard Terms by reference.",
+    "filename": "Partnership-Agreement-coverpage.md"
+  },
+  {
     "name": "Pilot Agreement",
     "description": "Standard terms for a short-term trial or evaluation of a product before a customer commits to a full commercial agreement, covering limited access rights, warranties disclaimers, and termination.",
     "filename": "Pilot-Agreement.md"
+  },
+  {
+    "name": "Pilot Agreement Cover Page",
+    "description": "Cover page for the Common Paper Pilot Agreement that captures the deal-specific variables (product, pilot period, fees, governing law) and incorporates the Pilot Agreement Standard Terms by reference.",
+    "filename": "Pilot-Agreement-coverpage.md"
   },
   {
     "name": "Business Associate Agreement",
@@ -55,8 +95,18 @@
     "filename": "BAA.md"
   },
   {
+    "name": "Business Associate Agreement Cover Page",
+    "description": "Cover page for the Common Paper Business Associate Agreement that captures the deal-specific variables (relationship, breach notification period, limitations) and incorporates the BAA Standard Terms by reference.",
+    "filename": "BAA-coverpage.md"
+  },
+  {
     "name": "AI Addendum",
     "description": "Standard terms supplementing a product agreement to govern the use of AI/ML features, including input and output ownership, model training restrictions, and AI-specific disclaimers.",
     "filename": "AI-Addendum.md"
+  },
+  {
+    "name": "AI Addendum Cover Page",
+    "description": "Cover page for the Common Paper AI Addendum that captures the deal-specific variables (training data, training purposes, restrictions) and incorporates the AI Addendum Standard Terms by reference.",
+    "filename": "AI-Addendum-coverpage.md"
   }
 ]
