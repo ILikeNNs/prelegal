@@ -30,3 +30,21 @@ export interface DocumentType {
 
 /** The AI's best-known value for each field of the active document, or null. */
 export type FieldValues = Record<string, string | null>;
+
+/** Mirrors backend.document_schemas.DocumentSummary. */
+export interface DocumentSummary {
+  id: number;
+  documentTypeKey: string | null;
+  documentName: string | null;
+  updatedAt: string;
+}
+
+/** Mirrors backend.document_schemas.DocumentDetail. */
+export interface DocumentDetail {
+  id: number;
+  documentTypeKey: string | null;
+  documentName: string | null;
+  fields: FieldValues;
+  messages: ChatMessage[];
+  updatedAt: string;
+}

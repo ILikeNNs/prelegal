@@ -63,3 +63,14 @@ from backend.main import app
 def client():
     with TestClient(app) as test_client:
         yield test_client
+
+
+@pytest.fixture()
+def authed_client(client):
+    """A client that's already signed up/in as a fresh user; cookies persist
+    across requests made with this client for the rest of the test."""
+    response = client.post(
+        "/api/auth/signup", json={"email": "chat-user@example.com", "password": "hunter22"}
+    )
+    assert response.status_code == 201
+    return client

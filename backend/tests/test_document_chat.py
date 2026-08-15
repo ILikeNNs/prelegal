@@ -23,7 +23,16 @@ def test_get_document_404_for_unknown_key(client):
     assert response.status_code == 404
 
 
-def test_chat_endpoint_returns_sanitized_reply(client, monkeypatch):
+def test_chat_endpoint_requires_auth(client):
+    response = client.post(
+        "/api/document-chat",
+        json={"messages": [{"role": "user", "content": "hi"}]},
+    )
+
+    assert response.status_code == 401
+
+
+def test_chat_endpoint_returns_sanitized_reply(authed_client, monkeypatch):
     def fake_generate_reply(messages: list[ChatMessage]) -> DocumentChatReply:
         assert messages[-1].content == "I need document A for Acme"
         return DocumentChatReply(
@@ -34,7 +43,7 @@ def test_chat_endpoint_returns_sanitized_reply(client, monkeypatch):
 
     monkeypatch.setattr(llm, "generate_reply", fake_generate_reply)
 
-    response = client.post(
+    response = authed_client.post(
         "/api/document-chat",
         json={"messages": [{"role": "user", "content": "I need document A for Acme"}]},
     )
@@ -44,12 +53,66 @@ def test_chat_endpoint_returns_sanitized_reply(client, monkeypatch):
     assert body["reply"] == "Got it!"
     assert body["documentType"] == "doc-a"
     assert body["fields"] == {"partyName": "Acme"}
+    assert isinstance(body["documentId"], int)
 
 
-def test_chat_endpoint_requires_at_least_one_message(client):
-    response = client.post("/api/document-chat", json={"messages": []})
+def test_chat_endpoint_requires_at_least_one_message(authed_client):
+    response = authed_client.post("/api/document-chat", json={"messages": []})
 
     assert response.status_code == 422
+
+
+def test_chat_endpoint_updates_same_document_across_turns(authed_client, monkeypatch):
+    replies = iter(
+        [
+            DocumentChatReply(reply="Turn 1", documentType=None, fields={}),
+            DocumentChatReply(reply="Turn 2", documentType="doc-a", fields={"partyName": "Acme"}),
+        ]
+    )
+    monkeypatch.setattr(llm, "generate_reply", lambda messages: next(replies))
+
+    first = authed_client.post(
+        "/api/document-chat", json={"messages": [{"role": "user", "content": "hi"}]}
+    )
+    document_id = first.json()["documentId"]
+
+    second = authed_client.post(
+        "/api/document-chat",
+        json={
+            "messages": [
+                {"role": "user", "content": "hi"},
+                {"role": "assistant", "content": "Turn 1"},
+                {"role": "user", "content": "it's document A, party is Acme"},
+            ],
+            "documentId": document_id,
+        },
+    )
+
+    assert second.status_code == 200
+    assert second.json()["documentId"] == document_id
+    assert second.json()["documentType"] == "doc-a"
+
+
+def test_chat_endpoint_rejects_documentid_owned_by_another_user(client, monkeypatch):
+    client.post("/api/auth/signup", json={"email": "owner@example.com", "password": "hunter22"})
+    monkeypatch.setattr(
+        llm,
+        "generate_reply",
+        lambda messages: DocumentChatReply(reply="hi", documentType=None, fields={}),
+    )
+    owned = client.post(
+        "/api/document-chat", json={"messages": [{"role": "user", "content": "hi"}]}
+    )
+    document_id = owned.json()["documentId"]
+    client.post("/api/auth/signout")
+
+    client.post("/api/auth/signup", json={"email": "other@example.com", "password": "hunter22"})
+    response = client.post(
+        "/api/document-chat",
+        json={"messages": [{"role": "user", "content": "hi"}], "documentId": document_id},
+    )
+
+    assert response.status_code == 404
 
 
 def test_generate_reply_drops_unknown_document_type(monkeypatch):

@@ -20,6 +20,7 @@ interface DocumentChatProps {
 export default function DocumentChat({ onDocumentChange, onFieldsChange }: DocumentChatProps) {
   const [messages, setMessages] = useState<ChatMessage[]>([GREETING]);
   const [documentKey, setDocumentKey] = useState<string | null>(null);
+  const [documentId, setDocumentId] = useState<number | null>(null);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -36,9 +37,13 @@ export default function DocumentChat({ onDocumentChange, onFieldsChange }: Docum
     setIsLoading(true);
 
     try {
-      const { reply, documentType, fields } = await sendDocumentChatMessage(nextMessages);
+      const { reply, documentType, fields, documentId: nextDocumentId } = await sendDocumentChatMessage(
+        nextMessages,
+        documentId
+      );
       setMessages([...nextMessages, { role: "assistant", content: reply }]);
       onFieldsChange(fields);
+      setDocumentId(nextDocumentId);
 
       if (documentType && documentType !== documentKey) {
         setDocumentKey(documentType);
@@ -59,14 +64,14 @@ export default function DocumentChat({ onDocumentChange, onFieldsChange }: Docum
             <span
               className={
                 "inline-block max-w-[85%] rounded-lg px-3 py-2 text-left text-sm " +
-                (message.role === "user" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-800")
+                (message.role === "user" ? "bg-brand-navy text-white" : "bg-gray-100 text-gray-800")
               }
             >
               {message.content}
             </span>
           </div>
         ))}
-        {isLoading && <div className="text-left text-sm text-gray-400">Thinking…</div>}
+        {isLoading && <div className="text-left text-sm text-brand-gray">Thinking…</div>}
       </div>
 
       {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
@@ -74,7 +79,7 @@ export default function DocumentChat({ onDocumentChange, onFieldsChange }: Docum
       <form onSubmit={handleSubmit} className="mt-4 flex gap-2">
         <input
           type="text"
-          className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-gray-500 focus:outline-none"
+          className="flex-1 rounded-md border border-gray-300 px-3 py-2 text-sm focus:border-brand-blue focus:outline-none"
           placeholder="Type your answer…"
           value={input}
           onChange={(event) => setInput(event.target.value)}
@@ -82,7 +87,7 @@ export default function DocumentChat({ onDocumentChange, onFieldsChange }: Docum
         />
         <button
           type="submit"
-          className="rounded-md bg-gray-900 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+          className="rounded-md bg-brand-purple px-4 py-2 text-sm font-medium text-white hover:opacity-90 disabled:opacity-50"
           disabled={isLoading || !input.trim()}
         >
           Send
