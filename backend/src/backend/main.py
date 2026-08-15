@@ -10,6 +10,7 @@ from backend.config import DEV_CORS_ORIGIN, SESSION_SECRET_KEY, STATIC_DIR
 from backend.database import init_db
 from backend.routers.auth import router as auth_router
 from backend.routers.document_chat import router as document_chat_router
+from backend.routers.history import router as history_router
 
 
 @asynccontextmanager
@@ -29,6 +30,7 @@ app.add_middleware(
 )
 app.include_router(auth_router)
 app.include_router(document_chat_router)
+app.include_router(history_router)
 
 if STATIC_DIR.is_dir():
     app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
